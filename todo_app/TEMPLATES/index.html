@@ -8,11 +8,36 @@
   </head>
   <body>
     <h1>Todo App</h1>
+  <form method="POST" action="{% url 'add_todo' %}" autocomplete="off">
+   {% csrf_token %}
+    <div class="mb-3">
+        <label for="todoInput" class="form-label">Add Todo</label>
+        <input type="text" class="form-control" id="todoInput" name= "todoInput" placeholder="Add Todo" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
     <hr />
+
     <h1>Todo List </h1>
-    <ul>
+
+    <ul class="list-group">
       {% for todo in todos%}
-       <li>{{todo.title}}</li>
+      <li {% if todo.completed %} class="list-group-item list-group-item-success" {% else %} class="list-group-item list-group-item-danger" {% endif %} style="display: flex; justify-content: space-between">
+        {{ todo.title }}
+        <div>
+        <form method="POST" action="{% url 'delete_todo' todo.id %}">
+         {% csrf_token %}
+          <button type="submit" class="btn btn-danger">DELETE</button>    
+        </form>
+        {% if todo.completed == False%}
+        <form method="POST" action="{% url 'mark_todo' todo.id %}">
+        {% csrf_token %}
+          <button type="submit" class="btn btn-warning">Mark as completed</button>    
+        </form>
+        {% endif %}
+       </div>
+      </li>
       {% endfor %}
     </ul>
 
