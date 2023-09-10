@@ -3,8 +3,26 @@ from django.http import HttpResponse, JsonResponse
 from todo_app.models import Todo
 # Create your views here.
 
+
+ORDER = {
+    "0": 'created_at',
+    "1": '-created_at'
+}
+
+
 def index(request):
-    all_todos = Todo.objects.all().order_by('-created_at')
+    search = request.GET.get('todoSearch')
+    completed = request.GET.get("completed")
+    order = request.GET.get('order')
+    all_todos = Todo.objects.all()
+    if search != None:
+        all_todos = all_todos.filter(title__icontains=search)
+    if completed != None:
+        all_todos = all_todos.filter(completed=completed)
+    if order != None:
+        value = ORDER.get(order)
+        all_todos = all_todos.order_by(value)
+
     context = {
         "todos": all_todos
     }

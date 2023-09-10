@@ -8,6 +8,15 @@
   </head>
   <body>
     <h1>Todo App</h1>
+    <a href="/todos/?completed=1" class="btn btn-primary">Show Completed Todos </a>
+    <a href="/todos/?completed=0" class="btn btn-secondary">Show Incompleted Todos </a>
+    <a href="/todos/?order=1" class="btn btn-info">Show Latest Todos </a>
+    <a href="/todos/?order=0" class="btn btn-warning">Show Oldest Todos </a>
+    <form method="GET" action="{% url 'todo_index' %}">
+      <input type="text" class="form-control" id="todoSearch" name="todoSearch" placeholder="Search Todo">
+      <button type="submit" class="btn btn-secondary">submit</button>
+    </form>
+
   <form method="POST" action="{% url 'add_todo' %}" autocomplete="off">
    {% csrf_token %}
     <div class="mb-3">
@@ -25,6 +34,7 @@
       {% for todo in todos%}
       <li {% if todo.completed %} class="list-group-item list-group-item-success" {% else %} class="list-group-item list-group-item-danger" {% endif %} style="display: flex; justify-content: space-between">
         {{ todo.title }}
+        <span class="badge rounded-pill text-bg-light">{{todo.created_at}}</span>
         <div>
         <form method="POST" action="{% url 'delete_todo' todo.id %}">
          {% csrf_token %}
@@ -33,7 +43,7 @@
         {% if todo.completed == False%}
         <form method="POST" action="{% url 'mark_todo' todo.id %}">
         {% csrf_token %}
-          <button type="submit" class="btn btn-warning">Mark as completed</button>    
+          <button type="submit" class="btn btn-warning btn-sm">Mark as completed</button>    
         </form>
         {% endif %}
        </div>
