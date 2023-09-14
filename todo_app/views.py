@@ -64,3 +64,7 @@ def mark_todo(request, todo_id):
         todo_object.completed = True 
         todo_object.save()
         return redirect('todo_index')
+
+
+def test(request):
+    return HttpResponse('Testing Django in production')
